@@ -7,15 +7,28 @@
 ;;(load ".spacemacs_common")
 
 (keyboard-translate ?\C-h ?\C-?)
+;; global
 (evil-define-key 'normal global-map
   (kbd "C-a") 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt)
 (evil-define-key 'normal global-map
   (kbd "C-x") 'spacemacs/evil-numbers-transient-state/evil-numbers/dec-at-pt)
 (evil-define-key 'insert global-map
   (kbd "C-u") '(lambda ()(interactive)(kill-line 0)))
+(evil-define-key 'insert global-map
+  (kbd "C-k") '(lambda ()(interactive)(kill-line)))
+;; python
 (evil-define-key 'normal python-mode-map
   (kbd "C-c") 'spacemacs/python-execute-file)
+;; org
 (evil-define-key 'insert org-mode-map
   (kbd "M-M") 'org-insert-heading-respect-content)
 (evil-define-key 'insert org-mode-map
   (kbd "M-m") 'org-meta-return)
+
+;; eshell
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-p") 'eshell-previous-matching-input-from-input)
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-n") 'eshell-next-matching-input-from-input)
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-u") 'eshell-kill-input)
