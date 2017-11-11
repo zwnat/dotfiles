@@ -16,6 +16,10 @@
   (kbd "C-u") '(lambda ()(interactive)(kill-line 0)))
 (evil-define-key 'insert global-map
   (kbd "C-k") '(lambda ()(interactive)(kill-line)))
+(evil-define-key 'insert global-map
+  (kbd "C-e") 'end-of-line)
+(evil-define-key 'insert global-map
+  (kbd "C-a") 'beginning-of-line)
 ;; python
 (evil-define-key 'normal python-mode-map
   (kbd "C-c") 'spacemacs/python-execute-file)
@@ -32,3 +36,9 @@
   (kbd "C-n") 'eshell-next-matching-input-from-input)
 (evil-define-key 'insert eshell-mode-map
   (kbd "C-u") 'eshell-kill-input)
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-a") 'eshell-bol)
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-r") 'eshell-previous-input)
+(evil-define-key 'insert eshell-mode-map
+  (kbd "C-s") 'eshell-next-input)
