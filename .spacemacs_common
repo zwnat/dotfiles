@@ -30,15 +30,21 @@
   (kbd "M-m") 'org-meta-return)
 
 ;; eshell
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-p") 'eshell-previous-matching-input-from-input)
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-n") 'eshell-next-matching-input-from-input)
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-u") 'eshell-kill-input)
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-a") 'eshell-bol)
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-r") 'eshell-previous-input)
-(evil-define-key 'insert eshell-mode-map
-  (kbd "C-s") 'eshell-next-input)
+;; 普通に設定すると二個目以降のeshell起動で
+;; 設定が反映されない問題を回避するため関数化
+(defun eshell-key-setting ()
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-p") 'eshell-previous-matching-input-from-input)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-n") 'eshell-next-matching-input-from-input)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-u") 'eshell-kill-input)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-a") 'eshell-bol)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-r") 'eshell-previous-input)
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-s") 'eshell-next-input)
+)
+(defun start-eshell (num) (interactive "P") (eshell num)(eshell-key-setting))
+(spacemacs/set-leader-keys ":" 'start-eshell)
