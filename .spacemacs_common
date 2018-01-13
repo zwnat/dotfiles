@@ -20,6 +20,8 @@
   (kbd "C-e") 'end-of-line)
 (evil-define-key 'insert global-map
   (kbd "C-a") 'beginning-of-line)
+(evil-define-key 'insert global-map
+  (kbd "C-d") 'delete-forward-char)
 ;; python
 (evil-define-key 'normal python-mode-map
   (kbd "C-c") 'spacemacs/python-execute-file)
@@ -45,6 +47,12 @@
     (kbd "C-r") 'eshell-previous-input)
   (evil-define-key 'insert eshell-mode-map
     (kbd "C-s") 'eshell-next-input)
+  (smartparens-mode)
+  (show-smartparens-mode)
+  (setq eshell-command-aliases-list
+        (append
+         '(
+          ("ff" "find-file $1"))))
 )
 (defun start-eshell (num) (interactive "P") (eshell num)(eshell-key-setting))
 (spacemacs/set-leader-keys ":" 'start-eshell)
