@@ -48,9 +48,10 @@
   (evil-define-key 'insert eshell-mode-map
     (kbd "C-a") 'eshell-bol)
   (evil-define-key 'insert eshell-mode-map
-    (kbd "C-r") 'eshell-previous-input)
+    (kbd "C-r") 'eshell-previous-matching-input-from-input)
+
   (evil-define-key 'insert eshell-mode-map
-    (kbd "C-s") 'eshell-next-input)
+    (kbd "C-s") 'eshell-next-matching-input-from-input)
   (smartparens-mode)
   (show-smartparens-mode)
   (setq eshell-command-aliases-list
