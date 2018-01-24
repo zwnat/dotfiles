@@ -9,9 +9,13 @@
 (keyboard-translate ?\C-h ?\C-?)
 ;; global
 (evil-define-key 'normal global-map
+  (kbd "Y") '(lambda ()(interactive)(evil-yank (point) (point-at-eol))))
+(evil-define-key 'normal global-map
   (kbd "C-a") 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt)
 (evil-define-key 'normal global-map
   (kbd "C-x") 'spacemacs/evil-numbers-transient-state/evil-numbers/dec-at-pt)
+(evil-define-key 'normal global-map
+  (kbd "C-i") 'evil-jump-forward)
 (evil-define-key 'insert global-map
   (kbd "C-u") '(lambda ()(interactive)(kill-line 0)))
 (evil-define-key 'insert global-map
@@ -53,6 +57,85 @@
         (append
          '(
           ("ff" "find-file $1"))))
+  (prefer-coding-system 'utf-8)
 )
 (defun start-eshell (num) (interactive "P") (eshell num)(eshell-key-setting))
 (spacemacs/set-leader-keys ":" 'start-eshell)
+
+
+;; tabbar
+(require 'tabbar)
+(evil-define-key 'normal global-map
+  (kbd "C-n") 'tabbar-forward)
+(evil-define-key 'normal global-map
+  (kbd "C-p") 'tabbar-backward)
+(tabbar-mode 1)
+(setq tabbar-buffer-groups-function nil)
+;; 左に表示されるボタンを無効化
+(dolist (btn '(tabbar-buffer-home-button
+               tabbar-scroll-left-button
+               tabbar-scroll-right-button))
+  (set btn (cons (cons "" nil)
+                 (cons "" nil))))
+
+;; タブの長さ
+(setq tabbar-separator '(2.2))
+
+;; 外観変更
+(set-face-attribute
+ 'tabbar-default nil
+ :family "MeiryoKe_Gothic"
+ :background "#34495E"
+ :foreground "#EEEEEE"
+ :height 0.7
+ )
+(set-face-attribute
+ 'tabbar-unselected nil
+ :background "#34495E"
+ :foreground "#EEEEEE"
+ :box nil
+ )
+(set-face-attribute
+ 'tabbar-modified nil
+ :background "#E67E22"
+ :foreground "#EEEEEE"
+ :box nil
+ )
+(set-face-attribute
+ 'tabbar-selected nil
+ :background "#E74C3C"
+ :foreground "#EEEEEE"
+ :box nil)
+(set-face-attribute
+ 'tabbar-button nil
+ :box nil)
+(set-face-attribute
+ 'tabbar-separator nil
+ :height 1.2)
+;; タブに表示させるバッファの設定
+(defvar my-tabbar-displayed-buffers
+  '("*scratch*" "*eshell*" "*Colors*" "*Faces*" "*vc-")
+  "*Regexps matches buffer names always included tabs.")
+
+(defun my-tabbar-buffer-list ()
+  "Return the list of buffers to show in tabs.
+Exclude buffers whose name starts with a space or an asterisk.
+The current buffer and buffers matches `my-tabbar-displayed-buffers'
+are always included."
+  (let* ((hides (list ?\  ?\*))
+         (re (regexp-opt my-tabbar-displayed-buffers))
+         (cur-buf (current-buffer))
+         (tabs (delq nil
+                     (mapcar (lambda (buf)
+                               (let ((name (buffer-name buf)))
+                                 (when (or (string-match re name)
+                                           (not (memq (aref name 0) hides)))
+                                   buf)))
+                             (buffer-list)))))
+    ;; Always include the current buffer.
+    (if (memq cur-buf tabs)
+        tabs
+      (cons cur-buf tabs))))
+;; 普通に設定すると起動時に読み込まれないので、
+;; 初期バッファーが読み込まれた後に設定
+(add-hook 'spacemacs-buffer-mode-hook '(lambda () (setq tabbar-buffer-list-function 'my-tabbar-buffer-list)))
