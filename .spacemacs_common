@@ -9,8 +9,10 @@
 ;; キーマップ
 (keyboard-translate ?\C-h ?\C-?)
 ;; global
+;(evil-define-key 'normal global-map
+;  (kbd "Y") '(lambda ()(interactive)(evil-yank (point) (point-at-eol)))) ;下で良いが参考のためコメントで残す
 (evil-define-key 'normal global-map
-  (kbd "Y") '(lambda ()(interactive)(evil-yank (point) (point-at-eol))))
+  (kbd "Y") (kbd "y $"))
 (evil-define-key 'normal global-map
   (kbd "C-a") 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt)
 (evil-define-key 'normal global-map
@@ -79,15 +81,15 @@
            )))
   (prefer-coding-system 'utf-8)
 )
+
 (defun jump-to-line () (interactive)
        (beginning-of-line)
-       (search-forward-regexp "\\(.*?\\):\\(.*?\\):")
-       (let ((file (match-string 1)) (line (string-to-int (match-string 2))))
+       (search-forward-regexp "\\((標準入力):.*:\\)*\\(.*?\\):\\(.*?\\):")
+       (let ((file (match-string 2)) (line (string-to-int (match-string 3))))
          (find-file file)
          (goto-line line)
          )
 )
-(defun eshell-grep (arg) (grep (concat "grep --color -nH " (car arg))))
 (defun start-eshell (num) (interactive "P") (eshell num)(eshell-key-setting))
 (spacemacs/set-leader-keys ":" 'start-eshell)
 
@@ -173,4 +175,5 @@ are always included."
 (if window-system
       (set-frame-parameter nil 'alpha 95))
 ;; gtags
+;; install gtags from source https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Btags/gtags
 (setenv "GTAGSLABEL" "pygments")
